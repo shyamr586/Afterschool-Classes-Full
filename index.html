@@ -10,24 +10,60 @@
         <div id="app">
 
             <div id = "centering">
-                <h1 id="mainhead">
-                    After School Classes
+                <h1 id="mainhead" v-text = sitename>
+                    
                 </h1>
             </div>
             
             <div  id = "classlist" class="container">
                
                 <div class="row">     
-                    <div style = "background-color:black; color:white" class="col-lg-5">
-                        one
+                    <div id = "column" class="col-lg-5">
+                        <div class = "card">	
+                            <div class = "front">
+                                <img src="">
+                            </div>
+                            <div class = "back">
+                                <div class = "back-info">
+                                    <h2>{{classes.subject}}</h2>
+                                    <hr>
+                                    <div class = "details">
+                                        <p>Location : {{classes.location}}</p>
+                                        
+                                        <p>Price : {{classes.price}}</p>
+                                        
+                                        <p>Spaces : {{classes.spaces}}</p>
+
+                                        <button class="addcart">Add to cart</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="col-lg-2">
                         blank
                     </div>
                     
-                    <div style = "background-color:black; color:white" class="col-lg-5">
-                        two
+                    <div id="column" class="col-lg-5">
+                        <div class = "card">
+                            <div class = "front">
+                                <img src="">
+                            </div>
+                            <div class = "back">
+                                <div class = "back-info">
+                                    <h2>Subject: {{classes.subject}}</h2>
+                                    <hr>
+                                    <p>Location: {{classes.location}}</p>
+                                    <p>Price: {{classes.price}}</p>
+                                    <p>Spaces: {{classes.spaces}}</p>
+                                </div>
+                                <div class = "footer">
+                                    <hr>
+                                    <p>footer</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     
                     
@@ -39,7 +75,13 @@
             var app = new Vue({
                 el: "#app",
                 data: {
-                
+                    sitename: "After School Classes",
+                    classes: {
+                        subject: "Mathematics",
+                        location: "London",
+                        price: "$200",
+                        spaces: "5"
+                    }
                 },
                 methods: {
                    
