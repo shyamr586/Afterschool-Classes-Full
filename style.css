@@ -1,0 +1,15 @@
+body{
+    background-color: rgb(112, 112, 228);
+}
+
+#centering{
+    text-align: center;
+}
+
+#mainhead{
+    margin: 40px auto;
+}
+
+#classlist{
+    margin-top: 5%;
+}
