@@ -3,10 +3,12 @@
     <head>
         <meta charset = "UTF-8">
         <title>After School Classes</title>
+        <script src = "classlist.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> <!-- cdn for vue -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     </head>
     <body>
+        <div id="background-tint"></div>
         <div id="app">
 
             <div id = "centering">
@@ -15,57 +17,35 @@
                 </h1>
             </div>
             
-            <div  id = "classlist" class="container">
-               
-                <div class="row">     
-                    <div id = "column" class="col-lg-5">
-                        <div class = "card">	
-                            <div class = "front">
-                                <img src="">
-                            </div>
-                            <div class = "back">
-                                <div class = "back-info">
-                                    <h2>{{classes.subject}}</h2>
-                                    <hr>
-                                    <div class = "details">
-                                        <p>Location : {{classes.location}}</p>
-                                        
-                                        <p>Price : {{classes.price}}</p>
-                                        
-                                        <p>Spaces : {{classes.spaces}}</p>
+            <div  id = "allclass" class="container">
+                
+                <div v-for= "classes in classlist">
+                        
+                    <div class = "card">	
+                        <div class = "front">
+                            <img v-bind:src="classes.image">
+                        </div>
+                        <div class = "back">
+                            <div class = "back-info">
+                                <h2>{{classes.subject}}</h2>
+                                <hr>
+                                <div class = "details">
+                                    <p>Location : {{classes.location}}</p>
+                                    
+                                    <p>Price : {{classes.price}}</p>
+                                    
+                                    <p>Spaces : {{classes.spaces}}</p>
 
-                                        <button class="addcart">Add to cart</button>
-                                    </div>
+                                    <button class="addcart">Add to cart</button>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     
-                    <div class="col-lg-2">
-                        blank
+                    <div id="blankspace">
+                        <!-- blank -->
                     </div>
-                    
-                    <div id="column" class="col-lg-5">
-                        <div class = "card">
-                            <div class = "front">
-                                <img src="">
-                            </div>
-                            <div class = "back">
-                                <div class = "back-info">
-                                    <h2>Subject: {{classes.subject}}</h2>
-                                    <hr>
-                                    <p>Location: {{classes.location}}</p>
-                                    <p>Price: {{classes.price}}</p>
-                                    <p>Spaces: {{classes.spaces}}</p>
-                                </div>
-                                <div class = "footer">
-                                    <hr>
-                                    <p>footer</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
                     
                 </div>
             </div>
@@ -76,12 +56,7 @@
                 el: "#app",
                 data: {
                     sitename: "After School Classes",
-                    classes: {
-                        subject: "Mathematics",
-                        location: "London",
-                        price: "$200",
-                        spaces: "5"
-                    }
+                    classlist: classlist,
                 },
                 methods: {
                    
