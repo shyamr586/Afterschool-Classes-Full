@@ -8,46 +8,88 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     </head>
     <body>
-        <div id="background-tint"></div>
+
         <div id="app">
 
-            <div id = "centering">
-                <h1 id="mainhead" v-text = sitename>
-                    
-                </h1>
-            </div>
-            
-            <div  id = "allclass" class="container">
-                
-                <div v-for= "classes in classlist">
+            <div class = "centering" >
+                <div id="background-tint">
+                    <h1 id="mainhead" v-text = sitename>
                         
-                    <div class = "card">	
-                        <div class = "front">
-                            <img v-bind:src="classes.image">
-                        </div>
-                        <div class = "back">
-                            <div class = "back-info">
-                                <h2>{{classes.subject}}</h2>
-                                <hr>
-                                <div class = "details">
-                                    <p>Location : {{classes.location}}</p>
-                                    
-                                    <p>Price : {{classes.price}}</p>
-                                    
-                                    <p>Spaces : {{classes.spaces}}</p>
+                    </h1>
+                    <div v-if = "page == 'product'">
+                        <button class = "pagebutton" v-on:click = "changePage('cart')">Cart</button>
+                    </div>
 
-                                    <button class="addcart">Add to cart</button>
+                    <div v-else-if = "page == 'cart'">
+                        <button class = "pagebutton" v-on:click = "changePage('product')">Product</button>
+                        <button class = "pagebutton" v-on:click = "changePage('checkout')">Check Out</button>
+                    
+                    </div>
+                    <div v-else-if = "page == 'checkout'">
+                        <button class = "pagebutton" v-on:click = "changePage('product')">Product</button>
+                        <button class = "pagebutton" v-on:click = "changePage('cart')">Cart</button>
+                    </div>
+                </div>
+            </div>
+            <div  id = "allclass" v-if = "page == 'product'">
+                <h1 class = "pagename">
+                    Products
+                </h1>
+                <div  class="container">
+                    
+                    <div v-for= "classes in classlist">
+                            
+                        <div class = "card">	
+                            <div class = "front">
+                                <img v-bind:src="classes.image">
+                            </div>
+                            <div class = "back">
+                                <div class = "back-info">
+                                    <h2>{{classes.subject}}</h2>
+                                    <hr>
+                                    <div class = "details">
+                                        <p>Location : {{classes.location}}</p>
+                                        
+                                        <p>Price : {{classes.price}}</p>
+                                        
+                                        <p>Spaces : {{classes.spaces}}</p>
+
+                                        <button v-if = "spaceAvailable(classes)" class="addcart" v-on:click=addtoCart(classes)>Add to cart</button>
+                                        <button v-else class="addcartdisabled" v-on:click=addtoCart(classes) disabled>Add to cart</button>
+                                        <div  v-if = "classes.spaces == 0">
+                                            <p class = "footer"><strong>No spaces available</strong></p>
+                                        </div>
+                                        <div  v-else-if = "lowSpacesAvailable(classes)">
+                                            <p class = "footer"><strong>About to run out soon!</strong></p>
+                                        </div>
+                                        <div  v-else>
+                                            <p class = "footer">Classes available!</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    
-                    <div id="blankspace">
-                        <!-- blank -->
+                        
+                        <div id="blankspace">
+                            <!-- blank -->
+                        </div>
+                        
                     </div>
-                    
                 </div>
+            </div>
+
+            <div v-else-if = "page == 'cart'">
+                <h1 class = "pagename">
+                    Cart
+                </h1>
+                
+            </div>
+
+            <div v-else-if = "page == 'checkout'">
+                <h1 class = "pagename">
+                    Checkout
+                </h1>
             </div>
         </div>
     
@@ -56,11 +98,41 @@
                 el: "#app",
                 data: {
                     sitename: "After School Classes",
-                    classlist: classlist,
+                    classlist: classes,
+                    page: "product",
+                    cart: [],
                 },
                 methods: {
-                   
+                   changePage(newpage){
+                        this.page = newpage;
+                        
+                   },
+
+                   addtoCart(classes){
+                        this.cart.push(classes.id);
+                        classes.spaces-=1;
+
+                   },
+
+                   spaceAvailable(classes){
+                        if (classes.spaces>0){
+                            return true
+                        }
+                        else{
+                            return false
+                        }
+                   },
+
+                   lowSpacesAvailable(classes){
+                        if (classes.spaces<=2){
+                            return true
+                        }
+                        else{
+                            return false
+                        }
+                   }
                 },
+            
             })
             
         </script> 

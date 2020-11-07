@@ -1,6 +1,7 @@
-let classlist = [
+let classes = [
 
     {
+        "id": "001",
         "subject": "Mathematics",
         "location": "London",
         "price": "$200",
@@ -9,11 +10,12 @@ let classlist = [
     },
 
     {
+        "id": "002",
         "subject": "Physics",
         "location": "London",
         "price": "$300",
-        "spaces": "10",
-        "image": "https://www.environmentalscience.org/wp-content/uploads/2018/08/physics-640x416.jpg",
+        "spaces": "5",
+        "image": "https://thumbs.dreamstime.com/b/physics-word-light-blue-background-vector-illustration-144584841.jpg",
     },
 
 ]
