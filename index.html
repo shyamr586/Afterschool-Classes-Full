@@ -114,6 +114,8 @@
                             </div>
                         </div>
 
+                        <div v-else></div>
+
                         <div id="blankspace">
                             <!-- blank -->
                         </div>
@@ -128,6 +130,19 @@
                 <h1 class = "pagename">
                     Checkout
                 </h1>
+                <div class= "left-pane">
+                    <strong><p>Name</p></strong>
+                    <input v-model = "userdetail.name" v-on:keypress = "checkKey">
+                    <br>
+                    <strong><p>Phone Number</p></strong>
+                    <input v-model.number = "userdetail.phone" type = "number">
+                    <br>
+                    <br>
+                    <div class = "centering">
+                        <button class = "checkoutbutton" v-on:click="checkout">Checkout Now</button>
+                    </div>
+                </div>
+                
             </div>
         </div>
     
@@ -140,8 +155,28 @@
                     page: "product",
                     cart: [],
                     cartarray: [],
+                    userdetail: {
+                        name: "",
+                        formattedname: "",
+                        phone: "",
+                    }
                 },
                 methods: {
+
+                    checkout(){
+                        alert("You have checked out.");
+                    },
+
+                    checkKey(event){
+                        ascii = event.key.charCodeAt(0);
+                        if (ascii>=65 && ascii<=90 || ascii>=97 && ascii<=122){
+                            return true;
+                        }
+                        else{
+                            event.preventDefault();
+                        }
+                    },
+
                    changePage(newpage){
                         if (newpage == 'cart'){
                            this.loadCart();
