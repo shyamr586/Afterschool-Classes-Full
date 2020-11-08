@@ -50,7 +50,7 @@
                                     <div class = "details">
                                         <p>Location : {{classes.location}}</p>
                                         
-                                        <p>Price : {{classes.price}}</p>
+                                        <p>Price : ${{classes.price}}</p>
                                         
                                         <p>Spaces : {{classes.spaces}}</p>
 
@@ -98,7 +98,7 @@
                                         <div class = "details">
                                             <p>Location : {{classes.location}}</p>
                                             
-                                            <p>Price : {{classes.price}}</p>
+                                            <p>Price : ${{classes.price*classes.addedtocart}}</p>
                                             
                                             <p>Quantity added to cart : {{classes.addedtocart}}</p>
 
@@ -142,13 +142,16 @@
                     
                 </div>
                 <div class = "right-pane">
-                    <h2>Receipt</h2>
+                    <h2 class = "centering">Receipt</h2>
+                    <hr>
                     <div v-for = "(classes,key) in cartarray">
                         <div v-if="classes.addedtocart>0">
-                            <p><span class = "ids">{{key+1}}</span><span class="subjects">{{classes.subject}} x{{classes.addedtocart}}</span><span class = "prices">{{classes.price}}</span></p>
-                    
+                            <p><span class = "ids">{{key+1}}</span><span class="subjects">{{classes.subject}} x{{classes.addedtocart}}</span><span class = "prices" style = "float:right;">${{classes.price*classes.addedtocart}}</span></p>
+                            
                         </div>
                     </div>
+                    <hr>
+                    <p><span class = "prices" style = "float:right;">${{totalprice}}</span></p>
                 </div>
                 <div class = "centering">
                     <button class = "checkoutbutton" id="fixaligncheckout" v-on:click="checkout">Checkout Now</button>
@@ -165,6 +168,7 @@
                     page: "product",
                     cart: [],
                     cartarray: [],
+                    totalprice: 0,
                     userdetail: {
                         name: "",
                         formattedname: "",
@@ -198,9 +202,11 @@
                         this.cart.push(classes.id);
                         classes.spaces-=1;
                         classes.addedtocart+=1;
+                        this.totalprice+=classes.price;
                    },
 
                    removefromCart(classes){
+                        this.totalprice-=classes.price;
                         i = this.cart.indexOf(classes.id);
                         this.cart.splice(i,1);
                         if (classes.addedtocart==1){
@@ -234,8 +240,8 @@
                                     "id": element.id,
                                     "subject": element.subject,
                                     "location": element.location,
-                                    "price": element.price*count,
                                     "addedtocart": count,
+                                    "price": element.price,
                                     "image": element.image,
                                 })
                                 
