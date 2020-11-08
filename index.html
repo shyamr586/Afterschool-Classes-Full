@@ -86,39 +86,34 @@
                 <div class = "centering">
 
                     <div v-for= "classes in cartarray">
-                        
-                        <div class = "card">	
-                            <div class = "front">
-                                <img v-bind:src="classes.image">
-                            </div>
-                            <div class = "back">
-                                <div class = "back-info">
-                                    <h2>{{classes.subject}}</h2>
-                                    <hr>
-                                    <div class = "details">
-                                        <p>Location : {{classes.location}}</p>
-                                        
-                                        <p>Price : {{classes.price}}</p>
-                                        
-                                        <p>Quantity added to cart : {{classes.addedtocart}}</p>
+                        <div v-if = "classes.addedtocart>0">
+                            <div class = "card">	
+                                <div class = "front">
+                                    <img v-bind:src="classes.image">
+                                </div>
+                                <div class = "back">
+                                    <div class = "back-info">
+                                        <h2>{{classes.subject}}</h2>
+                                        <hr>
+                                        <div class = "details">
+                                            <p>Location : {{classes.location}}</p>
+                                            
+                                            <p>Price : {{classes.price}}</p>
+                                            
+                                            <p>Quantity added to cart : {{classes.addedtocart}}</p>
 
-                                        <button v-if = "spaceAvailable(classes)" class="addcart" v-on:click=addtoCart(classes)>Add to cart</button>
-                                        <button v-else class="addcartdisabled" v-on:click=addtoCart(classes) disabled>Add to cart</button>
-                                        <div  v-if = "classes.spaces == 0">
-                                            <p class = "footer"><strong>No spaces available</strong></p>
-                                        </div>
-                                        <div  v-else-if = "lowSpacesAvailable(classes)">
-                                            <p class = "footer"><strong>About to run out soon!</strong></p>
-                                        </div>
-                                        <div  v-else>
-                                            <p class = "footer">Classes available!</p>
+                                            <button class="removecart" v-on:click=removefromCart(classes)>Remove</button>
+                                
+                                            <div  v-if = "classes.spaces == 0">
+                                                <p class = "footer"><strong>No spaces available</strong></p>
+                                            </div>
+                    
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        
                         <div id="blankspace">
                             <!-- blank -->
                         </div>
@@ -144,7 +139,6 @@
                     classlist: classes,
                     page: "product",
                     cart: [],
-                    ocurrences: [],
                     cartarray: [],
                 },
                 methods: {
@@ -161,6 +155,16 @@
                         classes.addedtocart+=1;
                    },
 
+                   removefromCart(classes){
+                       
+                        this.cartarray.forEach((element,index) => {
+                            if (element.id === classes.id){
+                                element.addedtocart-=1;
+                            }
+                        });
+                    
+                   },
+
                    spaceAvailable(classes){
                         if (classes.spaces>0){
                             return true
@@ -169,8 +173,6 @@
                             return false
                         }
                    },
-
-                   
 
                    loadCart(){
                         this.classlist.forEach((element,index) => {
@@ -186,41 +188,6 @@
                                 })
                             }
                         });
-                        // cartlen = this.cart.length;
-                        // // alert("Cartlen is "+cartlen);
-                        // if (cartlen>0){
-                        //     this.classlist.forEach((element,index) => {
-                        //         for (i = 0; i<=this.cart.length; i++){
-                        //             a = this.addtoCartArray(this.cart, this.cart[i]);
-                        //             alert(a)
-                        //             // if (this.cart[i] == element.id){
-                        //             //     if (this.cartarray.length==0){
-                        //             //         this.cartarray.push({
-                        //             //             "id": element.id,
-                        //             //             "subject": element.subject,
-                        //             //             "location": element.location,
-                        //             //             "price": element.price,
-                        //             //             "spaces": element.spaces,
-                        //             //             "addedtocart": element.addedtocart,
-                        //             //             "image": element.image,
-                        //             //         })
-                        //             //     }
-                        //             //     else{
-                        //             //         this.cartarray.forEach((element1,index1) => {
-                        //             //             if (element1.id == this.cart[i]){
-                        //             //                 element1.price+=element.price;
-                        //             //                 alert(element1.price)
-                        //             //             }
-                        //             //         });
-                        //             //     }
-                        //             // }
-                        //         }
-                        //     });
-                        // }
-                        // else{
-                        //     alert("Go back to products page to add products your cart.")
-                        //     this.page = "product";
-                        // }
                    },
 
                    checkOccurences(value){
@@ -231,10 +198,6 @@
                             }
                         }
                         return found;
-                   },
-
-                   addtoCartArray(){            //add all classes with count more than 0 to cart array
-                     
                    },
 
                    lowSpacesAvailable(classes){
