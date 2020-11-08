@@ -86,7 +86,7 @@
                 <div class = "centering">
 
                     <div v-for= "classes in cartarray">
-                        <div v-if = "classes.addedtocart>0">
+                        
                             <div class = "card">	
                                 <div class = "front">
                                     <img v-bind:src="classes.image">
@@ -112,9 +112,9 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        
 
-                        <div v-else></div>
+                        
 
                         <div id="blankspace">
                             <!-- blank -->
@@ -134,15 +134,25 @@
                     <strong><p>Name</p></strong>
                     <input v-model = "userdetail.name" v-on:keypress = "checkKey">
                     <br>
+                    <br>
                     <strong><p>Phone Number</p></strong>
                     <input v-model.number = "userdetail.phone" type = "number">
                     <br>
                     <br>
-                    <div class = "centering">
-                        <button class = "checkoutbutton" v-on:click="checkout">Checkout Now</button>
+                    
+                </div>
+                <div class = "right-pane">
+                    <h2>Receipt</h2>
+                    <div v-for = "(classes,key) in cartarray">
+                        <div v-if="classes.addedtocart>0">
+                            <p><span class = "ids">{{key+1}}</span><span class="subjects">{{classes.subject}} x{{classes.addedtocart}}</span><span class = "prices">{{classes.price}}</span></p>
+                    
+                        </div>
                     </div>
                 </div>
-                
+                <div class = "centering">
+                    <button class = "checkoutbutton" id="fixaligncheckout" v-on:click="checkout">Checkout Now</button>
+                </div>
             </div>
         </div>
     
@@ -191,13 +201,19 @@
                    },
 
                    removefromCart(classes){
-                       
-                        this.cartarray.forEach((element,index) => {
-                            if (element.id === classes.id){
-                                element.addedtocart-=1;
-                            }
-                        });
-                    
+                        i = this.cart.indexOf(classes.id);
+                        this.cart.splice(i,1);
+                        if (classes.addedtocart==1){
+                            i= this.cartarray.indexOf(classes);
+                            this.cartarray.splice(i,1)
+                        }
+                        else{
+                            this.cartarray.forEach((element,index) => {
+                                if (element.id == classes.id){
+                                    element.addedtocart-=1;
+                                }
+                            });
+                        }
                    },
 
                    spaceAvailable(classes){
@@ -210,6 +226,7 @@
                    },
 
                    loadCart(){
+                        this.cartarray = [];
                         this.classlist.forEach((element,index) => {
                             count = this.checkOccurences(element.id);
                             if (count>0){
@@ -218,11 +235,13 @@
                                     "subject": element.subject,
                                     "location": element.location,
                                     "price": element.price*count,
-                                    "addedtocart": element.addedtocart,
+                                    "addedtocart": count,
                                     "image": element.image,
                                 })
+                                
                             }
                         });
+                        
                    },
 
                    checkOccurences(value){
@@ -232,6 +251,7 @@
                                 found+=1;
                             }
                         }
+                        
                         return found;
                    },
 

@@ -196,3 +196,27 @@ body {
     box-shadow: 0px 0px 25px 0px  rgb(238, 63, 63); /*increase the third value to have more glow first 2*/
                                                         /* x y position and 4th is basically border*/
 }
+
+.left-pane{
+    float:left;
+    margin-left:10%;
+    background-color: rgba(0,0,0,0.7);
+    color:white;
+    padding:3%;
+    text-align:center;
+}
+
+.right-pane{
+    float:left;
+    margin-left:30%;
+    background-color: rgba(0,0,0,0.7);
+    color:white;
+}
+
+#fixaligncheckout{
+    position: fixed;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    bottom:3px;
+    left:40%;
+}
