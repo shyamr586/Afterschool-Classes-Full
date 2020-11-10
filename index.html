@@ -1,284 +1,367 @@
 <!DOCTYPE html>
-<html lang = "en">
-    <head>
-        <meta charset = "UTF-8">
-        <title>After School Classes</title>
-        <script src = "classlist.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> <!-- cdn for vue -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    </head>
-    <body>
+<html lang="en">
 
-        <div id="app">
+<head>
+    <meta charset="UTF-8">
+    <title>After School Classes</title>
+    <script src="classlist.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> <!-- cdn for vue -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
 
-            <div class = "centering" >
-                <div id="background-tint">
-                    <h1 id="mainhead" v-text = sitename>
-                        
-                    </h1>
-                    <div v-if = "page == 'product'">
-                        <button class = "pagebutton" v-on:click = "changePage('cart')">Cart</button>
-                    </div>
+<body>
 
-                    <div v-else-if = "page == 'cart'">
-                        <button class = "pagebutton" v-on:click = "changePage('product')">Product</button>
-                        <button class = "pagebutton" v-on:click = "changePage('checkout')">Check Out</button>
-                    
-                    </div>
-                    <div v-else-if = "page == 'checkout'">
-                        <button class = "pagebutton" v-on:click = "changePage('product')">Product</button>
-                        <button class = "pagebutton" v-on:click = "changePage('cart')">Cart</button>
-                    </div>
-                </div>
-            </div>
-            <div  id = "allclass" v-if = "page == 'product'">
-                <h1 class = "pagename">
-                    Products
+    <div id="app">
+
+        <div class="centering">
+            <div id="background-tint">
+                <h1 id="mainhead" v-text=sitename>
+
                 </h1>
-                <div  class="container">
-                    
-                    <div v-for= "classes in classlist">
-                            
-                        <div class = "card">	
-                            <div class = "front">
-                                <img v-bind:src="classes.image">
-                            </div>
-                            <div class = "back">
-                                <div class = "back-info">
-                                    <h2>{{classes.subject}}</h2>
-                                    <hr>
-                                    <div class = "details">
-                                        <p>Location : {{classes.location}}</p>
-                                        
-                                        <p>Price : ${{classes.price}}</p>
-                                        
-                                        <p>Spaces : {{classes.spaces}}</p>
-
-                                        <button v-if = "spaceAvailable(classes)" class="addcart" v-on:click=addtoCart(classes)>Add to cart</button>
-                                        <button v-else class="addcartdisabled" v-on:click=addtoCart(classes) disabled>Add to cart</button>
-                                        <div  v-if = "classes.spaces == 0">
-                                            <p class = "footer"><strong>No spaces available</strong></p>
-                                        </div>
-                                        <div  v-else-if = "lowSpacesAvailable(classes)">
-                                            <p class = "footer"><strong>About to run out soon!</strong></p>
-                                        </div>
-                                        <div  v-else>
-                                            <p class = "footer">Classes available!</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        
-                        <div id="blankspace">
-                            <!-- blank -->
-                        </div>
-                        
-                    </div>
+                <div v-if="page == 'Product'">
+                    <button v-if = "cart.length > 0" class="pagebutton" v-on:click="changePage('Cart')">Cart</button>
+                    <button v-else class="pagebuttondisabled" v-on:click="errormessage(2)">Cart</button>
                 </div>
+
+                <div v-else-if="page == 'Cart'">
+                    <button class="pagebutton" v-on:click="changePage('Product')">Product</button>
+                    <button v-if = "cart.length > 0" class="pagebutton" v-on:click="changePage('Checkout')">Check Out</button>
+                    <button v-else class="pagebuttondisabled" v-on:click="errormessage(2)">Ceck Out</button>
+
+                </div>
+                <div v-else-if="page == 'Checkout'">
+                    <button class="pagebutton" v-on:click="changePage('Product')">Product</button>
+                    <button class="pagebutton" v-on:click="changePage('Cart')">Cart</button>
+                </div>
+                <h1 class = "pagename">{{page}}</h1>
             </div>
+        </div>
+        <div id="allclass" v-if="page == 'Product'">
+            
+            <div id = "sorting-options">
 
-            <div v-else-if = "page == 'cart'">
-                <h1 class = "pagename" v-on:click = "loadCart">
-                    Cart
-                </h1>
-                <div class = "centering">
+                <div class = "left-pane2">
+                    <input type="radio" id="sortby1" value="ascending" v-model="sortby">
+                    <label for="sortby1">Ascending</label>
+                    <input type="radio" id="sortby2" value="descending" v-model="sortby">
+                    <label for="sortby2">Descending</label>
+                </div>
 
-                    <div v-for= "classes in cartarray">
-                        
-                            <div class = "card">	
-                                <div class = "front">
-                                    <img v-bind:src="classes.image">
-                                </div>
-                                <div class = "back">
-                                    <div class = "back-info">
-                                        <h2>{{classes.subject}}</h2>
-                                        <hr>
-                                        <div class = "details">
-                                            <p>Location : {{classes.location}}</p>
-                                            
-                                            <p>Price : ${{classes.price*classes.addedtocart}}</p>
-                                            
-                                            <p>Quantity added to cart : {{classes.addedtocart}}</p>
-
-                                            <button class="removecart" v-on:click=removefromCart(classes)>Remove</button>
-                                
-                                            <div  v-if = "classes.spaces == 0">
-                                                <p class = "footer"><strong>No spaces available</strong></p>
-                                            </div>
-                    
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        
-
-                        
-
-                        <div id="blankspace">
-                            <!-- blank -->
-                        </div>
-                        
-                    </div>
-
+                <div class = "right-pane2">
+                    <input type="radio" id="category1" value="price" v-model="category">
+                    <label for="category1">Price</label>
+                    <input type="radio" id="category2" value="subject" v-model="category">
+                    <label for="category2">Subject</label>
+                    <input type="radio" id="category3" value="location" v-model="category">
+                    <label for="category3">Location</label>
+                    <input type="radio" id="category4" value="spaces" v-model="category">
+                    <label for="category4">Availability</label>
                 </div>
                 
             </div>
+            <div class="container">
 
-            <div v-else-if = "page == 'checkout'">
-                <h1 class = "pagename">
-                    Checkout
-                </h1>
-                <div class= "left-pane">
-                    <strong><p>Name</p></strong>
-                    <input v-model = "userdetail.name" v-on:keypress = "checkKey">
-                    <br>
-                    <br>
-                    <strong><p>Phone Number</p></strong>
-                    <input v-model.number = "userdetail.phone" type = "number">
-                    <br>
-                    <br>
-                    
-                </div>
-                <div class = "right-pane">
-                    <h2 class = "centering">Receipt</h2>
-                    <hr>
-                    <div v-for = "(classes,key) in cartarray">
-                        <div v-if="classes.addedtocart>0">
-                            <p><span class = "ids">{{key+1}}</span><span class="subjects">{{classes.subject}} x{{classes.addedtocart}}</span><span class = "prices" style = "float:right;">${{classes.price*classes.addedtocart}}</span></p>
-                            
+                <div v-for="classes in sortedArrayFunc">
+
+                    <div class="card">
+                        <div class="front">
+                            <img v-bind:src="classes.image">
+                        </div>
+                        <div class="back">
+                            <div class="back-info">
+                                <h2>{{classes.subject}}</h2>
+                                <hr>
+                                <div class="details">
+                                    <p>Location : {{classes.location}}</p>
+
+                                    <p>Price : ${{classes.price}}</p>
+
+                                    <p>Spaces : {{classes.spaces}}</p>
+
+                                    <button v-if="spaceAvailable(classes)" class="addcart"
+                                        v-on:click=addtoCart(classes)>Add to cart</button>
+                                    <button v-else class="addcartdisabled" v-on:click=addtoCart(classes) disabled>Add to
+                                        cart</button>
+                                    <div v-if="classes.spaces == 0">
+                                        <p class="footer"><strong>No spaces available</strong></p>
+                                    </div>
+                                    <div v-else-if="lowSpacesAvailable(classes)">
+                                        <p class="footer"><strong>About to run out soon!</strong></p>
+                                    </div>
+                                    <div v-else>
+                                        <p class="footer">Classes available!</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <hr>
-                    <p><span class = "prices" style = "float:right;">${{totalprice}}</span></p>
-                </div>
-                <div class = "centering">
-                    <button class = "checkoutbutton" id="fixaligncheckout" v-on:click="checkout">Checkout Now</button>
+
+
+                    <div id="blankspace">
+                        <!-- blank -->
+                    </div>
+
                 </div>
             </div>
         </div>
-    
-        <script>
-            var app = new Vue({
-                el: "#app",
-                data: {
-                    sitename: "After School Classes",
-                    classlist: classes,
-                    page: "product",
-                    cart: [],
-                    cartarray: [],
-                    totalprice: 0,
-                    userdetail: {
-                        name: "",
-                        formattedname: "",
-                        phone: "",
+
+        <div v-else-if="page == 'Cart'">
+            
+            <div class="centering">
+
+                <div v-for="classes in cartarray">
+
+                    <div class="card">
+                        <div class="front">
+                            <img v-bind:src="classes.image">
+                        </div>
+                        <div class="back">
+                            <div class="back-info">
+                                <h2>{{classes.subject}}</h2>
+                                <hr>
+                                <div class="details">
+                                    <p>Location : {{classes.location}}</p>
+
+                                    <p>Price : ${{classes.price*classes.addedtocart}}</p>
+
+                                    <p>Quantity added to cart : {{classes.addedtocart}}</p>
+
+                                    <button class="removecart" v-on:click=removefromCart(classes)>Remove</button>
+
+                                    <div v-if="classes.spaces == 0">
+                                        <p class="footer"><strong>No spaces available</strong></p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="blankspace">
+                        <!-- blank -->
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div v-else-if="page == 'Checkout'">
+            
+            <div class="left-pane">
+                <strong>
+                    <p>Name</p>
+                </strong>
+                <input v-model.trim="userdetail.name" v-on:keypress="checkKey">
+                <br>
+                <br>
+                <strong>
+                    <p>Phone Number</p>
+                </strong>
+                <input v-model.number="userdetail.phone" type="number">
+                <br>
+                <br>
+
+            </div>
+            <div class="right-pane">
+                <h2 class="centering">Receipt</h2>
+                <hr>
+                <div v-for="(classes,key) in cartarray">
+                    <div v-if="classes.addedtocart>0">
+                        <p><span class="ids">{{key+1}}</span>
+                            <span class="subjects">{{classes.subject}} x{{classes.addedtocart}}</span>
+                            <span class="prices"style="float:right;">
+                                ${{classes.price*classes.addedtocart}}</span></p>
+
+                    </div>
+                </div>
+                <hr>
+                <p>
+                    <span class="ids">{{userdetail.name}}</span>
+                    <span class="subjects">({{userdetail.phone}})</span>
+                    <span class="prices" style="float:right;">${{totalprice}}</span>
+                </p>
+            </div>
+            <div class="centering">
+                <button v-if = "detailsEntered" class="checkoutbutton" id="fixaligncheckout" v-on:click="checkout">Checkout Now</button>
+                <button v-else class="checkoutbuttondisabled" id="fixaligncheckout" v-on:click="errormessage(1)">Checkout Now</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var app = new Vue({
+            el: "#app",
+            data: {
+                sitename: "After School Classes",
+                classlist: classes,
+                page: "Product",
+                cart: [],
+                cartarray: [],
+                totalprice: 0,
+                sortby: "ascending",
+                category: "price",
+                userdetail: {
+                    name: "",
+                    phone: "",
+                }
+            },
+            methods: {
+
+                errormessage(message){
+                    if (message==1){
+                        alert("Please enter name and phone number.\nMake sure your cart is not empty.");
+                    }
+                    else if(message==2){
+                        alert("Please add items to cart.");
+                    }
+                    
+                },
+
+                checkout() {
+                    alert("You have checked out.");
+                    this.cart = [];
+                    this.cartarray = [];
+                    this.page = "Product";
+                },
+
+                checkKey(event) {
+                    ascii = event.key.charCodeAt(0);
+                    if (ascii >= 65 && ascii <= 90 || ascii >= 97 && ascii <= 122 || ascii == 32) {
+                        return true;
+                    }
+                    else {
+                        event.preventDefault();
                     }
                 },
-                methods: {
 
-                    checkout(){
-                        alert("You have checked out.");
-                    },
+                changePage(newpage) {
+                    if (newpage == 'Cart') {
+                        this.loadCart();
+                    }
+                    this.page = newpage;
+                },
 
-                    checkKey(event){
-                        ascii = event.key.charCodeAt(0);
-                        if (ascii>=65 && ascii<=90 || ascii>=97 && ascii<=122){
-                            return true;
-                        }
-                        else{
-                            event.preventDefault();
-                        }
-                    },
+                addtoCart(classes) {
+                    this.cart.push(classes.id);
+                    classes.spaces -= 1;
+                    classes.addedtocart += 1;
+                    this.totalprice += classes.price;
+                },
 
-                   changePage(newpage){
-                        if (newpage == 'cart'){
-                           this.loadCart();
-                        }
-                        this.page = newpage;
-                   },
-
-                   addtoCart(classes){
-                        this.cart.push(classes.id);
-                        classes.spaces-=1;
-                        classes.addedtocart+=1;
-                        this.totalprice+=classes.price;
-                   },
-
-                   removefromCart(classes){
-                        this.totalprice-=classes.price;
-                        i = this.cart.indexOf(classes.id);
-                        this.cart.splice(i,1);
-                        if (classes.addedtocart==1){
-                            i= this.cartarray.indexOf(classes);
-                            this.cartarray.splice(i,1)
-                        }
-                        else{
-                            this.cartarray.forEach((element,index) => {
-                                if (element.id == classes.id){
-                                    element.addedtocart-=1;
-                                }
-                            });
-                        }
-                   },
-
-                   spaceAvailable(classes){
-                        if (classes.spaces>0){
-                            return true
-                        }
-                        else{
-                            return false
-                        }
-                   },
-
-                   loadCart(){
-                        this.cartarray = [];
-                        this.classlist.forEach((element,index) => {
-                            count = this.checkOccurences(element.id);
-                            if (count>0){
-                                this.cartarray.push({
-                                    "id": element.id,
-                                    "subject": element.subject,
-                                    "location": element.location,
-                                    "addedtocart": count,
-                                    "price": element.price,
-                                    "image": element.image,
-                                })
-                                
+                removefromCart(classes) {
+                    this.totalprice -= classes.price;
+                    i = this.cart.indexOf(classes.id);
+                    this.cart.splice(i, 1);
+                    if (classes.addedtocart == 1) {
+                        i = this.cartarray.indexOf(classes);
+                        this.cartarray.splice(i, 1)
+                    }
+                    else {
+                        this.cartarray.forEach((element, index) => {
+                            if (element.id == classes.id) {
+                                element.addedtocart -= 1;
                             }
                         });
-                        
-                   },
-
-                   checkOccurences(value){
-                        found = 0
-                        for (i = 0; i<=this.cart.length; i++){
-                            if (value==this.cart[i]){
-                                found+=1;
-                            }
-                        }
-                        
-                        return found;
-                   },
-
-                   lowSpacesAvailable(classes){
-                        if (classes.spaces<=2){
-                            return true
-                        }
-                        else{
-                            return false
-                        }
-                   }
+                    }
                 },
-            
-            })
-            
-        </script> 
-        
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-        <link rel="stylesheet" type="text/css" href="style.css">
-    </body>
-</html>
 
+                spaceAvailable(classes) {
+                    if (classes.spaces > 0) {
+                        return true
+                    }
+                    else {
+                        return false
+                    }
+                },
+
+                loadCart() {
+                    this.cartarray = [];
+                    this.classlist.forEach((element, index) => {
+                        
+                        count = this.checkOccurences(element.id);
+                        if (count > 0) {
+                            this.cartarray.push({
+                                "id": element.id,
+                                "subject": element.subject,
+                                "location": element.location,
+                                "addedtocart": count,
+                                "price": element.price,
+                                "image": element.image,
+                            })
+
+                        }
+                    });
+
+                },
+
+                checkOccurences(value) {
+                    found = 0
+                    for (i = 0; i <= this.cart.length; i++) {
+                        if (value == this.cart[i]) {
+                            found += 1;
+                        }
+                    }
+
+                    return found;
+                },
+
+                lowSpacesAvailable(classes) {
+                    if (classes.spaces <= 2) {
+                        return true
+                    }
+                    else {
+                        return false
+                    }
+                },
+
+                ascendingSort(category) {
+
+                },
+
+            },
+
+            computed: {
+                sortedArrayFunc() {
+                    sortedArray = this.classlist;
+                    if (this.sortby == "ascending"){
+                        sortedArray.sort((a, b) => (a[this.category] > b[this.category]) ? 1 : -1)
+                    }
+                    else if (this.sortby == "descending"){
+                        sortedArray.sort((a, b) => (a[this.category] < b[this.category]) ? 1 : -1)
+                    }
+                    return sortedArray;
+                },
+
+                detailsEntered(){
+                    scope = this.userdetail;
+                    if ((scope.name == "") && (scope.phone == "")){
+                        return false
+                    }
+                    else if (this.cartarray.length===0){
+                        return false
+                    }
+                    else{
+                        return true
+                    }
+                },
+            }
+
+        })
+
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</body>
+
+</html>

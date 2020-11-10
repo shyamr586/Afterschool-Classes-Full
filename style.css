@@ -4,6 +4,11 @@ body {
     background-attachment: fixed;
 }
 
+@font-face {
+    font-family: typewriter;
+    src: url(fonts/Bohemian\ Typewriter.ttf); 
+}
+
 #background-tint{
     top:0;
     background-color: rgba(0,0,0,0.5);
@@ -102,7 +107,7 @@ body {
     margin-top:3%;
 }
 
-.addcart, .addcartdisabled, .removecart, .checkoutbutton{
+.addcart, .addcartdisabled, .removecart, .checkoutbutton, .checkoutbuttondisabled{
     text-align: center;
     line-height: 60px;
     color: #fff;
@@ -122,6 +127,18 @@ body {
 
 .checkoutbutton{
     background-color: rgba(255,255,255,0.1);
+}
+
+.checkoutbuttondisabled{
+    animation: animate 8s linear infinite;
+    border: 0.5px solid cyan;
+    background: rgb(134, 129, 139);
+    letter-spacing: 5px;
+    color: rgb(255, 255, 255);
+}
+
+.checkoutbuttondisabled:hover{
+    cursor: no-drop;
 }
 
 .addcart:hover {
@@ -154,7 +171,7 @@ body {
     color: rgb(255, 255, 255);
 }
 
-.pagebutton {
+.pagebutton, .pagebuttondisabled {
     
     text-align: center;
     line-height: 30px;
@@ -181,6 +198,14 @@ body {
     color: rgb(253, 253, 253);
     box-shadow: 0px 0px 25px 0px  rgb(195, 212, 40); /*increase the third value to have more glow first 2*/
                                                         /* x y position and 4th is basically border*/
+}
+
+.pagebuttondisabled:hover {
+    cursor: no-drop;
+    animation: animate 8s linear infinite;
+    border: 0.5px solid cyan;
+    background: rgb(134, 129, 139);
+    color: rgb(253, 253, 253);
 }
 
 .pagename{
@@ -219,6 +244,8 @@ body {
     border-radius:40px;
     width: 30%;
     margin-bottom:10%;
+    font-family: typewriter;
+    font-weight:100;
 }
 
 .right-pane hr{
@@ -240,4 +267,11 @@ body {
 
 .subjects{
     margin-right:10%;
+}
+
+#sorting-options{
+    background-color: rgba(0,0,0,0.7);
+    padding-top:10px;
+    padding-bottom:10px;
+    color:white;
 }
