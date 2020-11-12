@@ -1,7 +1,7 @@
-
 body {
     background-image: url("https://i1.wp.com/wiobyrne.com/wp-content/uploads/2018/07/GleamingReflectingCricket.gif?ssl=1");
     background-attachment: fixed;
+    font-family: 'Lato', sans-serif;;
 }
 
 @font-face {
@@ -9,10 +9,19 @@ body {
     src: url(fonts/Bohemian\ Typewriter.ttf); 
 }
 
+@font-face {
+    font-family: headings;
+    src: url(fonts/AYearWithoutRain.ttf); 
+}
+
+
 #background-tint{
     top:0;
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0,0,0,0.7);
     padding:30px;
+    font-family: headings;
+    color:white;
+    margin-bottom:3%;
 }
 
 #blankspace{
@@ -21,13 +30,6 @@ body {
 
 .centering{
     text-align: center;
-}
-
-#column{
-    background-color:black;
-    color:white;
-    padding:0px;
-    margin:0px;
 }
 
 #mainhead{
@@ -46,6 +48,8 @@ body {
     margin: 10px auto;
     color:white;
     border: 0px;
+    letter-spacing: 2px;
+    font-weight:600;
 }
 
 .card .front{
@@ -107,14 +111,14 @@ body {
     margin-top:3%;
 }
 
-.addcart, .addcartdisabled, .removecart, .checkoutbutton, .checkoutbuttondisabled{
+.addcart, .addcartdisabled, .removecart, .checkoutbutton{
     text-align: center;
     line-height: 60px;
     color: #fff;
     font-size: 20px;
     text-transform: uppercase;
     text-decoration: none;
-    font-family: "coolbuttonFont";
+    font-family: "headings";
     letter-spacing: 4px;
     background: transparent;
     border:none;
@@ -123,6 +127,10 @@ body {
     padding-right: 20px;
     border-radius: 50px;
     
+}
+
+.checkoutbuttondisabled{
+    display: none;
 }
 
 .checkoutbutton{
@@ -175,13 +183,13 @@ body {
     
     text-align: center;
     line-height: 30px;
-    color: #fff;
+    color: #000000;
     font-size: 20px;
     text-transform: uppercase;
     text-decoration: none;
-    font-family: "coolbuttonFont";
+    font-family: "headings";
     letter-spacing: 4px;
-    background: transparent;
+    background: rgb(222, 243, 35);
     border:none;
     font-weight:200;
     padding-left: 20px;
@@ -235,6 +243,11 @@ body {
     border-radius:40px;
 }
 
+
+.left-pane2{
+    float: right;
+}
+
 .right-pane{
     float:left;
     margin-left:25%;
@@ -271,7 +284,15 @@ body {
 
 #sorting-options{
     background-color: rgba(0,0,0,0.7);
-    padding-top:10px;
-    padding-bottom:10px;
+    padding:10px;
     color:white;
+    font-size:18px;
+}
+
+#checkoutheading{
+    font-family: headings;
+    color:white;
+    background-color: rgba(0,0,0,0.7);
+    padding:10px;
+    margin-bottom: 3%;
 }

@@ -8,6 +8,8 @@
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> <!-- cdn for vue -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -16,9 +18,9 @@
 
         <div class="centering">
             <div id="background-tint">
-                <h1 id="mainhead" v-text=sitename>
-
+                <strong><h1 id="mainhead" v-text=sitename>
                 </h1>
+                <h2 class = "pagename">{{page}}</h2></strong>
                 <div v-if="page == 'Product'">
                     <button v-if = "cart.length > 0" class="pagebutton" v-on:click="changePage('Cart')">Cart</button>
                     <button v-else class="pagebuttondisabled" v-on:click="errormessage(2)">Cart</button>
@@ -26,15 +28,9 @@
 
                 <div v-else-if="page == 'Cart'">
                     <button class="pagebutton" v-on:click="changePage('Product')">Product</button>
-                    <button v-if = "cart.length > 0" class="pagebutton" v-on:click="changePage('Checkout')">Check Out</button>
-                    <button v-else class="pagebuttondisabled" v-on:click="errormessage(2)">Ceck Out</button>
 
                 </div>
-                <div v-else-if="page == 'Checkout'">
-                    <button class="pagebutton" v-on:click="changePage('Product')">Product</button>
-                    <button class="pagebutton" v-on:click="changePage('Cart')">Cart</button>
-                </div>
-                <h1 class = "pagename">{{page}}</h1>
+                
             </div>
         </div>
         <div id="allclass" v-if="page == 'Product'">
@@ -43,20 +39,20 @@
 
                 <div class = "left-pane2">
                     <input type="radio" id="sortby1" value="ascending" v-model="sortby">
-                    <label for="sortby1">Ascending</label>
+                    <label for="sortby1">Ascending &nbsp</label> 
                     <input type="radio" id="sortby2" value="descending" v-model="sortby">
                     <label for="sortby2">Descending</label>
                 </div>
 
                 <div class = "right-pane2">
                     <input type="radio" id="category1" value="price" v-model="category">
-                    <label for="category1">Price</label>
+                    <label for="category1">Price &nbsp</label>
                     <input type="radio" id="category2" value="subject" v-model="category">
-                    <label for="category2">Subject</label>
+                    <label for="category2">Subject &nbsp</label>
                     <input type="radio" id="category3" value="location" v-model="category">
-                    <label for="category3">Location</label>
+                    <label for="category3">Location &nbsp</label>
                     <input type="radio" id="category4" value="spaces" v-model="category">
-                    <label for="category4">Availability</label>
+                    <label for="category4">Availability &nbsp</label>
                 </div>
                 
             </div>
@@ -142,52 +138,50 @@
                     </div>
 
                 </div>
-
-            </div>
-
-        </div>
-
-        <div v-else-if="page == 'Checkout'">
-            
-            <div class="left-pane">
-                <strong>
-                    <p>Name</p>
-                </strong>
-                <input v-model.trim="userdetail.name" v-on:keypress="checkKey">
-                <br>
-                <br>
-                <strong>
-                    <p>Phone Number</p>
-                </strong>
-                <input v-model.number="userdetail.phone" type="number">
-                <br>
-                <br>
-
-            </div>
-            <div class="right-pane">
-                <h2 class="centering">Receipt</h2>
-                <hr>
-                <div v-for="(classes,key) in cartarray">
-                    <div v-if="classes.addedtocart>0">
-                        <p><span class="ids">{{key+1}}</span>
-                            <span class="subjects">{{classes.subject}} x{{classes.addedtocart}}</span>
-                            <span class="prices"style="float:right;">
-                                ${{classes.price*classes.addedtocart}}</span></p>
-
-                    </div>
+                    <h2 id = "checkoutheading">Checkout</h2>
+                <div class="left-pane">
+                    <strong>
+                        <p>Name</p>
+                    </strong>
+                    <input v-model.trim="userdetail.name" v-on:keypress="checkKey">
+                    <br>
+                    <br>
+                    <strong>
+                        <p>Phone Number</p>
+                    </strong>
+                    <input v-model.number="userdetail.phone" type="number">
+                    <br>
+                    <br>
+    
                 </div>
-                <hr>
-                <p>
-                    <span class="ids">{{userdetail.name}}</span>
-                    <span class="subjects">({{userdetail.phone}})</span>
-                    <span class="prices" style="float:right;">${{totalprice}}</span>
-                </p>
+                <div class="right-pane">
+                    <h2 class="centering">Receipt</h2>
+                    <hr>
+                    <div v-for="(classes,key) in cartarray">
+                        <div v-if="classes.addedtocart>0">
+                            <p><span class="ids">{{key+1}}</span>
+                                <span class="subjects">{{classes.subject}} x{{classes.addedtocart}}</span>
+                                <span class="prices"style="float:right;">
+                                    ${{classes.price*classes.addedtocart}}</span></p>
+    
+                        </div>
+                    </div>
+                    <hr>
+                    <p>
+                        <span class="ids">{{userdetail.name}}</span>
+                        <span class="subjects">({{userdetail.phone}})</span>
+                        <span class="prices" style="float:right;">${{totalprice}}</span>
+                    </p>
+                </div>
+                <div class="centering">
+                    <button v-if = "detailsEntered" class="checkoutbutton" id="fixaligncheckout" v-on:click="checkout">Checkout Now</button>
+                    <button v-else class="checkoutbuttondisabled" id="fixaligncheckout" v-on:click="errormessage(1)">Checkout Now</button>
+                </div>
+
             </div>
-            <div class="centering">
-                <button v-if = "detailsEntered" class="checkoutbutton" id="fixaligncheckout" v-on:click="checkout">Checkout Now</button>
-                <button v-else class="checkoutbuttondisabled" id="fixaligncheckout" v-on:click="errormessage(1)">Checkout Now</button>
-            </div>
+
         </div>
+
     </div>
 
     <script>
@@ -336,7 +330,10 @@
 
                 detailsEntered(){
                     scope = this.userdetail;
-                    if ((scope.name == "") && (scope.phone == "")){
+                    if ((scope.name == "")){
+                        return false
+                    }
+                    else if (scope.phone == ""){        //sometimes the && does not work hence, else if
                         return false
                     }
                     else if (this.cartarray.length===0){
